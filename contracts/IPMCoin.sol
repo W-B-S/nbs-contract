@@ -8,7 +8,7 @@ contract IPMCoin {
 	event Transfer(address indexed _from, address indexed _to, uint256 _value);
 
 	function IPMCoin() public {
-		balances[tx.origin] = 3 000 000 000;
+		balances[tx.origin] = 3000000000;
 	}
 
 	function sendCoin(address receiver, uint amount) public returns(bool sufficient) {
