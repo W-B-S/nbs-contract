@@ -14,8 +14,10 @@ contract IPMCoin is owned, TokenERC20{
     /* This generates a public event on the blockchain that will notify clients */
     event FrozenFunds(address target, bool frozen);
 
-	function IPMCoin()
-		TokenERC20(10000000000, "IPM") public {
+	function IPMCoin(
+        string tokenName,
+        string tokenSymbol)
+		TokenERC20(10000000000, tokenName, tokenSymbol) public {
 	}
 
 	/* Internal transfer, only can be called by this contract */
