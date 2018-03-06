@@ -9,17 +9,18 @@ contract TestIPMCoin {
   function testInitialBalanceUsingDeployedContract() public {
     IPMCoin meta = IPMCoin(DeployedAddresses.IPMCoin());
 
-    uint expected = 10000;
+    uint expected = 1e10;
 
-    Assert.equal(meta.getBalance(tx.origin), expected, "Owner should have 3000000000 IPMCoin initially");
+    Assert.equal(meta.getBalanceOf(0x627306090abaB3A6e1400e9345bC60c78a8BEf57), expected, "Owner should have 1e10 IPMCoin initially");
   }
 
   function testInitialBalanceWithNewMetaCoin() public {
     IPMCoin meta = new IPMCoin();
 
-    uint expected = 10000;
+    uint expected = 1e10;
 
-    Assert.equal(meta.getBalance(tx.origin), expected, "Owner should have 3000000000 IPMCoin initially");
+    Assert.equal(meta.getBalanceOf(tx.origin), expected,
+        "Owner should have 1e10 IPMCoin initially");
   }
 
 }

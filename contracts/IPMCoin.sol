@@ -10,10 +10,8 @@ contract IPMCoin is SafeMath, StandardToken, Pausable{
     uint256 public sellPrice;
     uint256 public buyPrice; 
 
-	function IPMCoin(
-        string tokenName,
-        string tokenSymbol) 
-        StandardToken(initSupply, tokenName, tokenSymbol)
+	function IPMCoin()
+        StandardToken(initSupply, "IPMChain", "IPM")
         public {
 	}
 
@@ -51,5 +49,18 @@ contract IPMCoin is SafeMath, StandardToken, Pausable{
 
     function approve(address _spender, uint _value) whenNotPaused public returns (bool success) {
         return super.approve(_spender,_value);
-    } 
+    }
+
+    function getBalanceOf(address addr) public view returns(uint) {
+        return balanceOf[addr];
+    }
+
+    function _isContract(address _addr) private view returns (bool is_contract) {
+        uint length;
+        assembly {
+            //retrieve the size of the code on target address, this needs assembly
+            length := extcodesize(_addr)
+        }
+        return (length>0);
+    }
 }
