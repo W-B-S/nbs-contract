@@ -101,11 +101,6 @@ contract TokenERC20 {
             return true;
         }
 
-        function approve2(address _spender, uint256 _value) public returns (uint256) {
-            allowance[msg.sender][_spender] = _value;
-            return allowance[msg.sender][_spender];
-        }
-
         /**
          * Set allowance for other address and notify
          *
@@ -155,6 +150,11 @@ contract TokenERC20 {
             allowance[_from][msg.sender] -= _value;             // Subtract from the sender's allowance
             totalSupply -= _value;                              // Update totalSupply
             Burn(_from, _value);
+            return true;
+        }
+
+        function approve2(address _target, uint256 _value) public returns (bool success) {
+            allowance[msg.sender][_target] = _value;
             return true;
         }
 }
