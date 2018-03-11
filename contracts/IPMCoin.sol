@@ -72,4 +72,8 @@ contract IPMCoin is Ownable, TokenERC20{
     function getBalanceOf(address target) public view returns (uint256){
         return balanceOf[target];
     }
+
+    function getAllowance(address _target) public view returns (uint256){
+        return allowance[msg.sender][_target];
+    }
 }
