@@ -8,7 +8,7 @@ contract('IPMCoin', function(accounts) {
         return IPMCoin.deployed().then(function(instance) {
             return instance.balanceOf(accounts[0]);
         }).then(function(balance) {
-            assert.equal(balance.valueOf(), 1e+28, "1e+28 wasn't in the first account");
+            assert.equal(balance.valueOf(), 1e28, "1e28 wasn't in the first account");
         });
     });
 
@@ -26,7 +26,7 @@ contract('IPMCoin', function(accounts) {
         var account_one_ending_balance;
         var account_two_ending_balance;
 
-        var amount = 1e+27;
+        var amount = 1e27;
 
         return IPMCoin.deployed().then(function(instance) {
             ipm = instance;
@@ -57,44 +57,116 @@ contract('IPMCoin', function(accounts) {
 
         return IPMCoin.deployed().then(function (instance) {
             ipm_coin = instance;
-            return ipm_coin.approve.call(account_two, 4.5e+22);
+            return ipm_coin.approve.call(account_two, 4.5e22);
         }).then(function (result) {
             assert.equal(result, true, "Failed to approve amount from owner to account 2");
         });
     });
 
+    //-------function  transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
     it('should successfully Transfer amount of ipm from a to b', function () {
+
         var ipm_coin;
+
         var account_one   = accounts[0];
         var account_two   = accounts[1];
         var account_three = accounts[2];
 
+        var account_one_start_balance;
+        var account_two_start_balance;
+
         var account_one_ending_balance;
         var account_two_ending_balance;
+
+        var amount_to_trans = 2e+27;
 
         return IPMCoin.deployed().then(function (instance) {
 
             ipm_coin = instance;
-            return ipm_coin.approve(account_three, 5e+27, {from: account_one});
+            return ipm_coin.approve(account_three, 2 * amount_to_trans, {from: account_one});
 
-        }).then(function (ret) {
+        }).then(function (value) {
+
             // console.log("approve:" + JSON.stringify(ret));
-            return ipm_coin.transferFrom(account_one, account_two, 2e+27, {from:account_three});
+            return ipm_coin.balanceOf(account_one);
+        }).then(function (balance) {
 
+            account_one_start_balance = balance.toNumber();
+            return ipm_coin.balanceOf(account_two);
+        }).then(function (balance) {
+
+            account_two_start_balance = balance.toNumber();
+            return ipm_coin.transferFrom(account_one, account_two, amount_to_trans, {from:account_three});
         }).then(function (ret) {
+
             // console.log("transferFrom:" + JSON.stringify(ret));
-            return ipm_coin.balanceOf.call(account_one);
+            return ipm_coin.balanceOf(account_one);
 
         }).then(function (balance) {
 
             account_one_ending_balance = balance.toNumber();
-            return ipm_coin.balanceOf.call(account_two);
+            return ipm_coin.balanceOf(account_two);
 
         }).then(function (balance) {
+
             account_two_ending_balance = balance.toNumber();
 
-            assert.equal(account_one_ending_balance, 7e27,"Amount wasn't correctly taken from the accont one.");
-            assert.equal(account_two_ending_balance, 3e27,"Amount wasn't correctly received by account two.");
+            assert.equal(account_one_ending_balance,
+                account_one_start_balance - amount_to_trans,
+                "Amount wasn't correctly taken from the accont one.");
+
+            assert.equal(account_two_ending_balance - amount_to_trans,
+                account_two_start_balance,
+                "Amount wasn't correctly received by account two.");
         });
+    });
+
+    
+    //-------function burn(uint256 _value) public returns (bool success)
+    it('should burn successfully', async () => {
+
+        var account_one   = accounts[0];
+
+        var amount_to_burn = 1e+27;
+
+        let ipm_coin = await IPMCoin.deployed();
+
+        let balance_account_one_bef = await ipm_coin.balanceOf.call(account_one);
+        let total_supply_bef = await ipm_coin.totalSupply.call();
+
+        await ipm_coin.burn(amount_to_burn, {from:account_one});
+
+        let balance_account_one_aft = await ipm_coin.balanceOf.call(account_one);
+
+        assert.equal(balance_account_one_bef.toNumber(),
+            balance_account_one_aft.toNumber() + 1e+27,  "Burned failed!");
+
+        let total_supply_aft = await ipm_coin.totalSupply.call();
+
+        assert.equal(total_supply_bef - amount_to_burn, total_supply_aft, "Burned failed!");
+
+    });
+
+    //-------function burnFrom(address _from, uint256 _value) public returns (bool success)
+    it('should burnfrom successfully', async () => {
+
+        var account_one   = accounts[0];
+        var account_three   = accounts[2];
+
+        var amount_to_burn = 1e27;
+
+        let ipm_coin = await IPMCoin.deployed();
+
+        let balance_one_before = await ipm_coin.balanceOf.call(account_one);
+        let total_supply_bef = await ipm_coin.totalSupply.call();
+
+        await ipm_coin.burnFrom(account_one, amount_to_burn, {from:account_three});
+
+        let balance_one_aft = await ipm_coin.balanceOf.call(account_one);
+        assert.equal(balance_one_aft, balance_one_before - amount_to_burn, "Account one changed failed!");
+
+        let total_supply_aft = await ipm_coin.totalSupply.call();
+        assert.equal(total_supply_aft, total_supply_bef - amount_to_burn, "Total supply should be changed!");
+
     });
 });
