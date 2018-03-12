@@ -78,7 +78,7 @@ contract('IPMCoin', function(accounts) {
         var account_one_ending_balance;
         var account_two_ending_balance;
 
-        var amount_to_trans = 2e+27;
+        var amount_to_trans = 2e+18;
 
         return IPMCoin.deployed().then(function (instance) {
 
@@ -127,7 +127,7 @@ contract('IPMCoin', function(accounts) {
 
         var account_one   = accounts[0];
 
-        var amount_to_burn = 1e+27;
+        var amount_to_burn = 1e+18;
 
         let ipm_coin = await IPMCoin.deployed();
 
@@ -139,7 +139,7 @@ contract('IPMCoin', function(accounts) {
         let balance_account_one_aft = await ipm_coin.balanceOf.call(account_one);
 
         assert.equal(balance_account_one_bef.toNumber(),
-            balance_account_one_aft.toNumber() + 1e+27,  "Burned failed!");
+            balance_account_one_aft.toNumber() + amount_to_burn,  "Burned failed!");
 
         let total_supply_aft = await ipm_coin.totalSupply.call();
 
@@ -153,7 +153,7 @@ contract('IPMCoin', function(accounts) {
         var account_one   = accounts[0];
         var account_three   = accounts[2];
 
-        var amount_to_burn = 1e27;
+        var amount_to_burn = 1;
 
         let ipm_coin = await IPMCoin.deployed();
 
@@ -166,7 +166,7 @@ contract('IPMCoin', function(accounts) {
         assert.equal(balance_one_aft, balance_one_before - amount_to_burn, "Account one changed failed!");
 
         let total_supply_aft = await ipm_coin.totalSupply.call();
-        assert.equal(total_supply_aft, total_supply_bef - amount_to_burn, "Total supply should be changed!");
+        assert.equal(total_supply_aft.toNumber(), total_supply_bef - amount_to_burn, "Total supply should be changed!");
 
     });
 });
