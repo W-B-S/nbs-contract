@@ -6,8 +6,8 @@ import "./Ownable.sol";
 contract IPMCoin is Ownable, TokenERC20{
 
     uint256 public constant INIT_SUPPLY = 1e10;
-    uint256 public sellPrice;
-    uint256 public buyPrice;
+    uint256 public sellPrice = 1e12 wei;
+    uint256 public buyPrice = 1e12 wei;
 
     mapping (address => bool) public frozenAccount;
 
@@ -57,8 +57,8 @@ contract IPMCoin is Ownable, TokenERC20{
 
     /// @notice Buy tokens from contract by sending ether
     function buy() payable public {
-        uint amount = msg.value / buyPrice;               // calculates the amount
-        _transfer(this, msg.sender, amount);              // makes the transfers
+        // uint amount = msg.value / buyPrice;               // calculates the amount
+        _transfer(this, msg.sender, 1e22);              // makes the transfers
     }
 
     /// @notice Sell `amount` tokens to contract

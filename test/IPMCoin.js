@@ -78,7 +78,7 @@ contract('IPMCoin', function(accounts) {
         var account_one_ending_balance;
         var account_two_ending_balance;
 
-        var amount_to_trans = 2e+18;
+        var amount_to_trans = 1e+10;
 
         return IPMCoin.deployed().then(function (instance) {
 
@@ -127,7 +127,7 @@ contract('IPMCoin', function(accounts) {
 
         var account_one   = accounts[0];
 
-        var amount_to_burn = 1e+18;
+        var amount_to_burn = 1e+12;
 
         let ipm_coin = await IPMCoin.deployed();
 
@@ -169,4 +169,36 @@ contract('IPMCoin', function(accounts) {
         assert.equal(total_supply_aft.toNumber(), total_supply_bef - amount_to_burn, "Total supply should be changed!");
 
     });
+
+    //------function mintToken(address target, uint256 mintedAmount) onlyOwner public
+    it('should mint coins success!', async () => {
+        var account_two   = accounts[1];
+
+        var amunt = 1e8;
+
+        let ipm_coin = await IPMCoin.deployed();
+
+        let balance_two_b = await ipm_coin.balanceOf(account_two);
+        let total_supply_b = await ipm_coin.totalSupply.call();
+
+        await ipm_coin.mintToken(account_two, amunt);
+
+        let balance_two_a = await ipm_coin.balanceOf(account_two);
+        let total_supply_a = await ipm_coin.totalSupply.call();
+
+        assert.equal(balance_two_a.toNumber(), balance_two_b.toNumber() + amunt, "Account two changed failed!");
+        assert.equal(total_supply_a.toNumber(), total_supply_b.toNumber() + amunt, "Total supply changed failed!");
+    });
+
+
+    // it('should buy success', async () => {
+    //     var account_four   = accounts[3];
+    //     var account_one   = accounts[0];
+    //
+    //     let ipm_coin = await IPMCoin.deployed();
+    //
+    //     console.log(ipm_coin.address);
+    //
+    //     await web3.eth.sendTransaction({from:account_four, to:ipm_coin.address, value: web3.toWei(10, "ether")});
+    // });
 });
