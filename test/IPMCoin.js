@@ -6,7 +6,7 @@ contract('IPMCoin', function(accounts) {
     //------function balanceOf(address target) public view returns (uint256)-------
     it("should put 1e+28 MetaCoin in the first account", function() {
         return IPMCoin.deployed().then(function(instance) {
-            return instance.balanceOf.call(accounts[0]);
+            return instance.balanceOf(accounts[0]);
         }).then(function(balance) {
             assert.equal(balance.valueOf(), 1e+28, "1e+28 wasn't in the first account");
         });
@@ -26,22 +26,22 @@ contract('IPMCoin', function(accounts) {
         var account_one_ending_balance;
         var account_two_ending_balance;
 
-        var amount = 5e+25;
+        var amount = 1e+27;
 
         return IPMCoin.deployed().then(function(instance) {
             ipm = instance;
-            return ipm.balanceOf.call(account_one);
+            return ipm.balanceOf(account_one);
         }).then(function(balance) {
             account_one_starting_balance = balance.toNumber();
-            return ipm.balanceOf.call(account_two);
+            return ipm.balanceOf(account_two);
         }).then(function(balance) {
             account_two_starting_balance = balance.toNumber();
             return ipm.transfer(account_two, amount, {from: account_one});
         }).then(function() {
-            return ipm.balanceOf.call(account_one);
+            return ipm.balanceOf(account_one);
         }).then(function(balance) {
             account_one_ending_balance = balance.toNumber();
-            return ipm.balanceOf.call(account_two);
+            return ipm.balanceOf(account_two);
         }).then(function(balance) {
             account_two_ending_balance = balance.toNumber();
 
@@ -71,34 +71,30 @@ contract('IPMCoin', function(accounts) {
 
         var account_one_ending_balance;
         var account_two_ending_balance;
-        var account_three_ending_balance;
 
         return IPMCoin.deployed().then(function (instance) {
 
             ipm_coin = instance;
-            return ipm_coin.approve2.call(account_three, 5e+25, {from: account_one});
+            return ipm_coin.approve(account_three, 5e+27, {from: account_one});
 
-        }).then(function (allow) {
-            console.log("approve2:" + allow.toString());
-            return ipm_coin.allowance.call(account_one, account_three);
+        }).then(function (ret) {
+            // console.log("approve:" + JSON.stringify(ret));
+            return ipm_coin.transferFrom(account_one, account_two, 2e+27, {from:account_three});
 
-            // ipm_coin.transferFrom.call(account_one, account_two, 2e25, {from:account_three});
-            // console.log(JSON.stringify(ret));
+        }).then(function (ret) {
+            // console.log("transferFrom:" + JSON.stringify(ret));
+            return ipm_coin.balanceOf.call(account_one);
 
-        }).then(function (allow) {
-            console.log("transferFrom1-3:" + allow.toNumber());
-            return ipm_coin.allowance.call(account_three, account_one);
-            // assert.equal(result, true, "Failed to transfer from account 1 to account 2");
-        //
-        //     account_one_ending_balance =ipm_coin.balanceOf.call(account_one);
-        //     account_two_ending_balance = ipm_coin.balanceOf.call(account_two);
-        //     account_three_ending_balance = ipm_coin.balanceOf.call(account_three);
-        //
-        //     assert.equal(account_one_ending_balance, 8e27,"Amount wasn't correctly taken from the sender");
-        //     assert.equal(account_two_ending_balance, 2e27,"Amount wasn't correctly taken from the sender");
-        //     assert.equal(account_three_ending_balance, 0,"Amount wasn't correctly taken from the sender");
-        }).then(function (value) {
-            console.log("transferFrom3-1:" + value.toNumber());
+        }).then(function (balance) {
+
+            account_one_ending_balance = balance.toNumber();
+            return ipm_coin.balanceOf.call(account_two);
+
+        }).then(function (balance) {
+            account_two_ending_balance = balance.toNumber();
+
+            assert.equal(account_one_ending_balance, 7e27,"Amount wasn't correctly taken from the accont one.");
+            assert.equal(account_two_ending_balance, 3e27,"Amount wasn't correctly received by account two.");
         });
     });
 });

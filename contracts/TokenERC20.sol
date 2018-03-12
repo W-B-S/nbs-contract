@@ -152,9 +152,4 @@ contract TokenERC20 {
             Burn(_from, _value);
             return true;
         }
-
-        function approve2(address _target, uint256 _value) public returns (bool success) {
-            allowance[msg.sender][_target] = _value;
-            return true;
-        }
 }
