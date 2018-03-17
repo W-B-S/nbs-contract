@@ -177,6 +177,7 @@ contract IPMCoin2 is owned, TokenERC20 {
 
     uint256 public sellPrice = 110000; //1eth = 110000IPM
     uint256 public buyPrice = 110000;//1eth = 110000IPM
+    uint256 public constant INIT_SUPPLY = 6.82e9;
 
     mapping (address => bool) public frozenAccount;
 
@@ -184,11 +185,7 @@ contract IPMCoin2 is owned, TokenERC20 {
     event FrozenFunds(address target, bool frozen);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
-    function IPMCoin2(
-        uint256 initialSupply,
-        string tokenName,
-        string tokenSymbol
-    ) TokenERC20(initialSupply, tokenName, tokenSymbol) public {}
+    function IPMCoin2() TokenERC20(INIT_SUPPLY, "IPMChain", "IPM") public {}
 
     /* Internal transfer, only can be called by this contract */
     function _transfer(address _from, address _to, uint _value) internal {
