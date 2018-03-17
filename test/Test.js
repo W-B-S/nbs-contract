@@ -29,4 +29,19 @@ contract('IPMCoin', function(accounts) {
         console.log("balace_ipm_after=>" + (balace_ipm_after));
     });
 
+    it('should sell success', async () => {
+        var account_four   = accounts[3];
+        var account_one   = accounts[0];
+
+        let ipm_coin = await IPMCoin.deployed();
+
+        let tx = await ipm_coin.sell(1.23e8, {from:account_one});
+
+        console.log("tx__=>"+JSON.stringify(tx));
+
+        let balace_ipm_after = await ipm_coin.balanceOf.call(ipm_coin.address);
+
+        console.log("balace_ipm_after=>" + (balace_ipm_after));
+    });
+
 });

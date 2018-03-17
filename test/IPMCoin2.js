@@ -192,27 +192,42 @@ contract('IPMCoin', function(accounts) {
 
     it('should buy success', async () => {
         var account_four   = accounts[3];
-    var account_one   = accounts[0];
+        var account_one   = accounts[0];
 
-    let ipm_coin = await IPMCoin.deployed();
+        let ipm_coin = await IPMCoin.deployed();
 
-    await ipm_coin.transfer(ipm_coin.address, 4e26, {from:account_one});
+        await ipm_coin.transfer(ipm_coin.address, 4e26, {from:account_one});
 
-    let balace_ipm = await ipm_coin.balanceOf.call(ipm_coin.address);
+        let balace_ipm = await ipm_coin.balanceOf.call(ipm_coin.address);
 
-    console.log("balace_ipm=>" + (balace_ipm));
+        console.log("balace_ipm=>" + (balace_ipm));
 
-    let ret = await ipm_coin.buy({from:account_four, value:web3.toWei(0.0025, "ether")});
+        let ret = await ipm_coin.buy({from:account_four, value:web3.toWei(0.0025, "ether")});
 
-    console.log("ret_=>"+JSON.stringify(ret));
+        console.log("ret_=>"+JSON.stringify(ret));
 
 
-    let balace_acc = await ipm_coin.balanceOf.call(account_four);
+        let balace_acc = await ipm_coin.balanceOf.call(account_four);
 
-    console.log("balace_acc=>" + (balace_acc));
+        console.log("balace_acc=>" + (balace_acc));
 
-    let balace_ipm_after = await ipm_coin.balanceOf.call(ipm_coin.address);
+        let balace_ipm_after = await ipm_coin.balanceOf.call(ipm_coin.address);
 
-    console.log("balace_ipm_after=>" + (balace_ipm_after));
+        console.log("balace_ipm_after=>" + (balace_ipm_after));
+    });
+
+    it('should sell success', async () => {
+        var account_four   = accounts[3];
+        var account_one   = accounts[0];
+
+        let ipm_coin = await IPMCoin.deployed();
+
+        let tx = await ipm_coin.sell(1.23e8, {from:account_one});
+
+        console.log("tx__=>"+JSON.stringify(tx));
+
+        let balace_ipm_after = await ipm_coin.balanceOf.call(ipm_coin.address);
+
+        console.log("balace_ipm_after=>" + (balace_ipm_after));
     });
 });
