@@ -175,8 +175,8 @@ contract TokenERC20 {
 
 contract IPMCoin2 is owned, TokenERC20 {
 
-    uint256 public sellPrice;
-    uint256 public buyPrice;
+    uint256 public sellPrice = 110000; //1eth = 110000IPM
+    uint256 public buyPrice = 110000;//1eth = 110000IPM
 
     mapping (address => bool) public frozenAccount;
 
@@ -230,14 +230,14 @@ contract IPMCoin2 is owned, TokenERC20 {
 
     /// @notice Buy tokens from contract by sending ether
     function buy() payable public {
-        uint amount = msg.value / buyPrice;               // calculates the amount
+        uint amount = msg.value * buyPrice;               // calculates the amount
         _transfer(this, msg.sender, amount);              // makes the transfers
     }
 
     /// @notice Sell `amount` tokens to contract
     /// @param amount amount of tokens to be sold
     function sell(uint256 amount) public {
-        require(this.balance >= amount * sellPrice);      // checks if the contract has enough ether to buy
+        require(this.balance >= amount / sellPrice);      // checks if the contract has enough ether to buy
         _transfer(msg.sender, this, amount);              // makes the transfers
         msg.sender.transfer(amount * sellPrice);          // sends ether to the seller. It's important to do this last to avoid recursion attacks
     }

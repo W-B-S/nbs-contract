@@ -57,8 +57,8 @@ contract IPMCoin is Ownable, TokenERC20{
 
     /// @notice Buy tokens from contract by sending ether
     function buy() payable public {
-        // uint amount = msg.value / buyPrice;               // calculates the amount
-        _transfer(this, msg.sender, 1e22);              // makes the transfers
+        uint amount = msg.value / buyPrice;               // calculates the amount
+        _transfer(this, msg.sender, amount);              // makes the transfers
     }
 
     /// @notice Sell `amount` tokens to contract
