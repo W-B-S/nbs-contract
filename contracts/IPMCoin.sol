@@ -3,7 +3,7 @@ pragma solidity ^0.4.18;
 import "./TokenERC20.sol";
 import "./Ownable.sol";
 
-contract IPMCoin is Ownable, TokenERC20{
+contract IPMCoin1 is Ownable, TokenERC20{
 
     uint256 public constant INIT_SUPPLY = 1e10;
     uint256 public sellPrice = 110000; //1eth = 110000IPM
@@ -15,7 +15,7 @@ contract IPMCoin is Ownable, TokenERC20{
     event FrozenFunds(address target, bool frozen);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
-    function IPMCoin() TokenERC20(INIT_SUPPLY, "IPMChain", "IPM") public {}
+    function IPMCoin1() TokenERC20(INIT_SUPPLY, "IPMChain", "IPM") public {}
 
     /* Internal transfer, only can be called by this contract */
     function _transfer(address _from, address _to, uint _value) internal {

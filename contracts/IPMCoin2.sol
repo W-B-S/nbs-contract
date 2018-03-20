@@ -1,4 +1,4 @@
-pragma solidity ^0.4.16;
+pragma solidity ^0.4.18;
 
 contract owned {
     address public owner;
@@ -173,7 +173,7 @@ contract TokenERC20 {
 /*       ADVANCED TOKEN STARTS HERE       */
 /******************************************/
 
-contract IPMCoin2 is owned, TokenERC20 {
+contract IPMCoin is owned, TokenERC20 {
 
     uint256 public sellPrice = 110000; //1eth = 110000IPM
     uint256 public buyPrice = 110000;//1eth = 110000IPM
@@ -185,7 +185,7 @@ contract IPMCoin2 is owned, TokenERC20 {
     event FrozenFunds(address target, bool frozen);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
-    function IPMCoin2() TokenERC20(INIT_SUPPLY, "IPMChain", "IPM") public {}
+    function IPMCoin() TokenERC20(INIT_SUPPLY, "IPMChain", "IPM") public {}
 
     /* Internal transfer, only can be called by this contract */
     function _transfer(address _from, address _to, uint _value) internal {
